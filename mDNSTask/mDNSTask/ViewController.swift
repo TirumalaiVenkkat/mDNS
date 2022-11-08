@@ -10,6 +10,7 @@ import Network
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var headerLbl: UILabel!
     @IBOutlet weak var publishBtn: UIButton!
     @IBOutlet weak var scanBtn: UIButton!
     @IBOutlet weak var dataTbl: UITableView!
@@ -38,6 +39,14 @@ class ViewController: UIViewController {
         self.typeLbl.text = "Type"
         self.IPLbl.text = "IP"
         self.portLbl.text = "Port"
+        
+        self.publishBtn.layer.borderWidth = 1
+        self.publishBtn.backgroundColor = UIColor.tintColor
+        self.publishBtn.tintColor = UIColor.white
+        
+        self.scanBtn.layer.borderWidth = 1
+        self.scanBtn.backgroundColor = UIColor.tintColor
+        self.scanBtn.tintColor = UIColor.white
         
         self.serviceName.textColor = UIColor.white
         self.typeLbl.textColor = UIColor.white
@@ -141,12 +150,10 @@ extension ViewController: NetServiceBrowserDelegate{
         print("Type",aNetService.type)
         print("Port", aNetService.port)
         if aNetService.port == -1 {
-            aNetService.delegate = self
-            aNetService.resolve(withTimeout: 10)
+            self.dataArr.append(MDNSData(serviceName: aNetService.name, port: aNetService.port.description, ipAddr: "0.0.0.0", type: aNetService.type))
         } else {
-            
+            self.dataArr.append(MDNSData(serviceName: aNetService.name, port: aNetService.port.description, ipAddr: "", type: aNetService.type))
         }
-        self.dataArr.append(MDNSData(serviceName: aNetService.name, port: aNetService.port.description, ipAddr: "", type: aNetService.type))
         self.dataTbl.reloadData()
         
         var hostname = [CChar](repeating: 0, count: Int(NI_MAXHOST))
